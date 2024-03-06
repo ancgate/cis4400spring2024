@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="greentaxi_dw_lgl" id="LogicalDesign-3cd" database="LogicalDesign" >
+	<schema name="INSTANCE" catalogname="greentaxi_dw_lgl" >
+		<table name="dim_location" prior="Entity" >
+			<column name="location_id" type="INT" jt="4" mandatory="y" />
+			<column name="borough" type="VARCHAR" length="255" jt="12" />
+			<column name="zone" type="VARCHAR" length="255" jt="12" />
+			<column name="latitude" type="DOUBLE" jt="8" />
+			<column name="longitude" type="DOUBLE" jt="8" />
+			<column name="service_zone" type="VARCHAR" length="255" jt="12" />
+			<index name="pk_dim_location" unique="PRIMARY_KEY" >
+				<column name="location_id" />
+			</index>
+		</table>
+		<table name="facts_trips" prior="trips_facts" >
+			<column name="fact_id" prior="factid" type="BIGINT" jt="-5" mandatory="y" />
+			<column name="fare_amount" type="DECIMAL" length="5" decimal="2" jt="3" />
+			<column name="extra_amount" type="DECIMAL" length="5" decimal="2" jt="3" mandatory="y" />
+			<column name="passenger_count" type="INT" jt="4" />
+			<column name="pulocation_id" prior="polocation_id" type="INT" jt="4" mandatory="y" />
+			<column name="dolocation_id" type="INT" jt="4" mandatory="y" />
+			<index name="pk_facts_trips" unique="PRIMARY_KEY" >
+				<column name="fact_id" />
+				<column name="pulocation_id" />
+				<column name="dolocation_id" />
+			</index>
+			<fk name="fk_facts_trips_dim_location" virtual="y" to_schema="greentaxi_dw_lgl.INSTANCE" to_table="dim_location" type="Identifying" mandatory="y" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="pulocation_id" pk="location_id" />
+			</fk>
+			<fk name="fk_facts_trips_dim_location_0" virtual="y" to_schema="greentaxi_dw_lgl.INSTANCE" to_table="dim_location" type="Identifying" mandatory="y" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="dolocation_id" pk="location_id" />
+			</fk>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout-798" show_relation="columns" >
+		<entity schema="greentaxi_dw_lgl.INSTANCE" name="dim_location" color="C1D8EE" x="544" y="255" />
+		<entity schema="greentaxi_dw_lgl.INSTANCE" name="facts_trips" color="C1D8EE" x="238" y="357" />
+		<callout x="51" y="51" pointer="Round" >
+			<comment><![CDATA[This is a layout - a diagram with tools.
+- Create new entities by right-clicking the layout. 
+- Double-click entity headers to edit.
+- For a better understanding of the schema, create multiple layouts.
+- Deploy the model into the database by converting it first to the physical design.]]></comment>
+		</callout>
+	</layout>
+</project>
